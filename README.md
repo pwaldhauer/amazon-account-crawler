@@ -4,6 +4,8 @@ Script zum aufsummieren der Amazon.de-Ausgaben.
 
 Dieses Script crawlt mittels Mechanize durch das Amazon-Konto und addiert alle getätigten Bestellungen auf, damit man am Ende schöne Statistiken (Euro/Jahr) erstellen kann.
 
+Aus der Reihe: Schnell zusammengehackt, keinerlei Anspruch auf Perfektion
+
 ## 1. Requirements
 1. Ruby
 2. Rubygems
@@ -23,6 +25,7 @@ Insgesamt fehlen noch einige Sachen, aber ich bin wohl zu faul dazu. Forkt es un
 1. Geht nur auf amazon.de (nicht auf .com/co.uk)
 2. Daten werden nicht sinnvoll (als csv oder so) ausgegeben
 3. Der Code ist nicht aufgeräumt oder schön -- sorry, erstes Ruby-Dings für mich
-4. Requests auf die Order-Übersichts-Seiten könnten parallelisiert werden um das crawlen zu verschnellern
-5. Sicher noch viel mehr
+4. Keinerlei Fehlerbehandlung, wenn er irgendwelche Felder nicht findet, oder XPath-Queries fehlschlagen
+5. Requests auf die Order-Übersichts-Seiten könnten parallelisiert werden um das crawlen zu verschnellern
+6. Sicher noch viel mehr
 
