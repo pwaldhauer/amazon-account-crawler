@@ -20,7 +20,7 @@ Dieses Script crawlt mittels Mechanize durch das Amazon-Konto und addiert alle g
 
 Insgesamt fehlen noch einige Sachen, aber ich bin wohl zu faul dazu. Forkt es und macht es besser!
 
-1. Geht nur auf amazon.de (nicht auf .cok/co.uk)
+1. Geht nur auf amazon.de (nicht auf .com/co.uk)
 2. Daten werden nicht sinnvoll (als csv oder so) ausgegeben
 3. Der Code ist nicht aufgeräumt oder schön -- sorry, erstes Ruby-Dings für mich
 4. Requests auf die Order-Übersichts-Seiten könnten parallelisiert werden um das crawlen zu verschnellern
