@@ -25,6 +25,8 @@ password = ask('Password:') { |q|
 a = Mechanize.new { |agent|
 	agent.user_agent_alias = 'Mac Safari'
 }
+# Disable SSL verification to make it work under windows without problems
+a.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
 a.get('http://amazon.de/') do |page|
 	login_page = a.click(page.link_with(:text => 'Melden Sie sich an'))
@@ -36,7 +38,7 @@ a.get('http://amazon.de/') do |page|
 
 	account_page = a.click(logged_in_page.link_with(:text => 'Mein Konto'))	
 
-	orders_page = a.click(account_page.link_with(:text => 'Bestellungen'))
+	orders_page = a.click(account_page.link_with(:text => 'Meine Bestellungen'))
 
 	years = Array.new
 
