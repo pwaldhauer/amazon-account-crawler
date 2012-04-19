@@ -79,6 +79,11 @@ a.get('http://amazon.' + $tld + '/') do |page|
 
 	select_form = orders_page.form_with(:id => 'order-dropdown-form')
 
+	if (select_form == nil)
+		puts "Seems like I could not log you in. I'm sorry :("
+		Process.exit
+	end
+
 	select_form.field_with(:name => 'orderFilter').options.each do |option|
 
 		if( option.value == 'select-another' or option.value == 'last30' or option.value == 'months-6') then
