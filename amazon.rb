@@ -64,14 +64,19 @@ a.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 puts 'Now scanning http://amazon.' + $tld + '/'
 
 a.get('http://amazon.' + $tld + '/') do |page|
-	login_page = a.click(page.link_with(:text => $logintext))
+	start_page = page.link_with(:text => $logintext)
 
-	logged_in_page = login_page.form_with(:id => 'ap_signin_form') do |f|
-		f.email = email
-		f.password = password
-	end.click_button
-
-	account_page = a.click(logged_in_page.link_with(:text => $accounttext))
+	if (start_page != nil )
+		login_page = a.click(start_page)
+		logged_in_page = login_page.form_with(:id => 'ap_signin_form') do |f|
+			f.email = email
+			f.password = password
+		end.click_button
+		
+		account_page = a.click(logged_in_page.link_with(:text => $accounttext))
+	else
+		account_page = a.click(page.link_with(:text => $accounttext))
+	end
 
 	orders_page = a.click(account_page.link_with(:text => $orderstext))
 
