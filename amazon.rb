@@ -110,10 +110,10 @@ a.get('http://amazon.' + $tld + '/') do |page|
 		order_links.each do |link|
 			order_page = a.click(link)
 
-			money_str = order_page.search(".//body/table[1]/tr[3]/td/b/nobr").text
+			money_str = order_page.search(".//body//table[1]/tr/td/table/tr[3]/td/b").text
 
 			if(money_str.index($currency) == nil) then
-				money_str = order_page.search(".//body/table[1]/tr[4]/td/b/nobr").text
+				money_str = order_page.search(".//body//table[1]/tr/td/table/tr[4]/td/b").text
 
 				if(money_str.index($currency) == nil) then
 					puts $currency + " not found. Link: " + link.href
@@ -122,6 +122,9 @@ a.get('http://amazon.' + $tld + '/') do |page|
 					next
 				end
 			end
+			
+			# multi-line result, select currency until end-of-string
+			money_str = money_str[money_str.index($currency)..-1]
 
 			money_str[$currency]= ''
 
