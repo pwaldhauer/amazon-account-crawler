@@ -64,9 +64,9 @@ a = Mechanize.new { |agent|
 # Disable SSL verification to make it work under windows without problems
 a.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-puts 'Now scanning http://amazon.' + $tld + '/'
+puts 'Now scanning https://amazon.' + $tld + '/'
 
-a.get('http://amazon.' + $tld + '/') do |page|
+a.get('https://amazon.' + $tld + '/') do |page|
 	start_page = page.link_with(:text => $logintext)
 
 	if (start_page != nil )
