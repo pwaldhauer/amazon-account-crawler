@@ -1,3 +1,6 @@
+#!/bin/env ruby
+# encoding: utf-8
+
 require 'rubygems'
 require 'mechanize'
 require 'highline/import'
@@ -61,17 +64,22 @@ a = Mechanize.new { |agent|
 # Disable SSL verification to make it work under windows without problems
 a.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-puts 'Now scanning http://amazon.' + $tld + '/'
+puts 'Now scanning https://amazon.' + $tld + '/'
 
-a.get('http://amazon.' + $tld + '/') do |page|
-	login_page = a.click(page.link_with(:text => $logintext))
+a.get('https://amazon.' + $tld + '/') do |page|
+	start_page = page.link_with(:text => $logintext)
 
-	logged_in_page = login_page.form_with(:id => 'ap_signin_form') do |f|
-		f.email = email
-		f.password = password
-	end.click_button
-
-	account_page = a.click(logged_in_page.link_with(:text => $accounttext))
+	if (start_page != nil )
+		login_page = a.click(start_page)
+		logged_in_page = login_page.form_with(:id => 'ap_signin_form') do |f|
+			f.email = email
+			f.password = password
+		end.click_button
+		
+		account_page = a.click(logged_in_page.link_with(:text => $accounttext))
+	else
+		account_page = a.click(page.link_with(:text => $accounttext))
+	end
 
 	orders_page = a.click(account_page.link_with(:text => $orderstext))
 
@@ -110,10 +118,10 @@ a.get('http://amazon.' + $tld + '/') do |page|
 		order_links.each do |link|
 			order_page = a.click(link)
 
-			money_str = order_page.search(".//body/table[1]/tr[3]/td/b/nobr").text
+			money_str = order_page.search(".//body//table[1]/tr/td/table/tr[3]/td/b").text
 
 			if(money_str.index($currency) == nil) then
-				money_str = order_page.search(".//body/table[1]/tr[4]/td/b/nobr").text
+				money_str = order_page.search(".//body//table[1]/tr/td/table/tr[4]/td/b").text
 
 				if(money_str.index($currency) == nil) then
 					puts $currency + " not found. Link: " + link.href
@@ -122,6 +130,9 @@ a.get('http://amazon.' + $tld + '/') do |page|
 					next
 				end
 			end
+			
+			# multi-line result, select currency until end-of-string
+			money_str = money_str[money_str.index($currency)..-1]
 
 			money_str[$currency]= ''
 
