@@ -30,11 +30,13 @@ password = ask('Password:') { |q|
 	q.echo = '*'	
 }
 
+
 # Dear amazon.com redesign,
 # FUCK YOU!
 # Sincerely, Pascal
 puts "1) Germany 2) UK"
 country = ask('Country: ', Integer) { |q| q.in = 1..2 }
+
 case country
 	when 2
 		$tld = 'co.uk'
@@ -67,7 +69,7 @@ a.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 puts 'Now scanning https://amazon.' + $tld + '/'
 
 a.get('https://amazon.' + $tld + '/') do |page|
-	start_page = page.link_with(:text => $logintext)
+	start_page = page.link_with(:id => 'nav-your-account')
 
 	if (start_page != nil )
 		login_page = a.click(start_page)
