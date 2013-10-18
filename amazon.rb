@@ -54,7 +54,7 @@ case country
 		$accounttext = 'Mein Konto'
 		$orderstext = 'Meine Bestellungen'
 		$currency = 'EUR '
-		$overviewtext = 'Übersicht anzeigen'
+		$overviewtext = 'Bestellübersicht drucken'
 		$pricedelimiter = ','
 		$thousandseperator = '.'
 		$nexttext = 'Weiter »'
