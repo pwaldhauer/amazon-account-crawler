@@ -57,7 +57,7 @@ case country
 		$overviewtext = 'Bestellübersicht drucken'
 		$pricedelimiter = ','
 		$thousandseperator = '.'
-		$nexttext = 'Weiter »'
+		$nexttext = 'Weiter→'
 end
 
 a = Mechanize.new { |agent|
@@ -87,7 +87,7 @@ a.get('https://amazon.' + $tld + '/') do |page|
 
 	years = Array.new
 
-	select_form = orders_page.form_with(:id => 'order-dropdown-form')
+	select_form = orders_page.form_with(:id => 'timePeriodForm')
 
 	if (select_form == nil)
 		puts "Seems like I could not log you in. I'm sorry :("
@@ -104,8 +104,8 @@ a.get('https://amazon.' + $tld + '/') do |page|
 
 		year_page = select_form.submit
 
-		count = year_page.search(".//div[@class='num-results']/b[1]")
-		year = year_page.search(".//div[@class='num-results']/b[2]")
+		count = year_page.search(".//span[@class='num-orders']")
+		year = year_page.search(".//span[@class='a-dropdown-prompt']")
 
 		puts "Year " + year.text + ", " + count.text + " orders"
 		print "\t"
