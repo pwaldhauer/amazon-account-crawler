@@ -159,9 +159,9 @@ a.get('https://amazon.' + $tld + '/') do |page|
 
 		puts "Done. Year total: " + year_sum.to_s
         
-        open('amazon.csv', 'a') { |f|
-            f.puts year.text + "," + year_sum.to_s
-        }
+        	open('amazon.csv', 'a') { |f|
+            		f.puts year.text + "," + year_sum.to_s
+        	}
 	end
 end
 
