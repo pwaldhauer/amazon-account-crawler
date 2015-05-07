@@ -61,7 +61,7 @@ case country
 end
 
 open('amazon.csv', 'w') { |f|
-    f.puts "year, amount"
+	f.puts "year, amount"
 }
 
 a = Mechanize.new { |agent|
