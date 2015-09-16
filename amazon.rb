@@ -12,9 +12,7 @@ require 'highline/import'
 
 def get_order_links(agent, page, order_links)
 	links = page.links_with(:text => $overviewtext)
-	links.each { |link|
-		order_links.push(link)
-	}
+	order_links += links
 
 	next_link = page.link_with(:text => $nexttext)
 
