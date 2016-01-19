@@ -5,10 +5,11 @@ require 'rubygems'
 require 'mechanize'
 require 'highline/import'
 
-# Will use global variables $tld, $logintext, $accounttext, $orderstext, currency, overviewtext, nexttext
+# Will use global variables $tld, currency, overviewtext, nexttext
 # They are used to identify different texts in different languages
-# (eg. $logintext = 'personalised recommendations' if UK is chosen,
-# because that's the text of the login-link on amazon.co.uk)
+# (eg. $overviewtext = 'Printable Order Summary' if UK is chosen,
+# because that's the text of the link to a printable order summary
+# on amazon.co.uk)
 
 def get_order_links(agent, page, order_links)
 	links = page.links_with(:text => $overviewtext)
@@ -40,9 +41,6 @@ country = ask('Country: ', Integer) { |q| q.in = 1..2 }
 case country
 	when 2
 		$tld = 'co.uk'
-		$logintext = 'personalised recommendations'
-		$accounttext = 'Your Account'
-		$orderstext = 'Your Orders'
 		$currency = '£'
 		$overviewtext = 'Printable Order Summary'
 		$pricedelimiter = '.'
@@ -50,9 +48,6 @@ case country
 		$nexttext = 'Next »'
 	else
 		$tld = 'de'
-		$logintext = 'Melden Sie sich an'
-		$accounttext = 'Mein Konto'
-		$orderstext = 'Meine Bestellungen'
 		$currency = 'EUR '
 		$overviewtext = 'Bestellübersicht drucken'
 		$pricedelimiter = ','
@@ -68,26 +63,15 @@ a.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
 puts 'Now scanning https://amazon.' + $tld + '/'
 
-a.get('https://amazon.' + $tld + '/') do |page|
-	start_page = page.link_with(:id => 'nav-your-account')
-
-	if (start_page != nil )
-		login_page = a.click(start_page)
-		logged_in_page = login_page.form_with(:id => 'ap_signin_form') do |f|
+a.get('https://www.amazon.' + $tld + '/gp/your-account/order-history/') do |page|
+		logged_in_page = page.form_with(:id => 'ap_signin_form') do |f|
 			f.email = email
 			f.password = password
 		end.click_button
 
-		account_page = a.click(logged_in_page.link_with(:text => $accounttext))
-	else
-		account_page = a.click(page.link_with(:text => $accounttext))
-	end
-
-	orders_page = a.click(account_page.link_with(:text => $orderstext))
-
 	years = Array.new
 
-	select_form = orders_page.form_with(:id => 'timePeriodForm')
+	select_form = logged_in_page.form_with(:id => 'timePeriodForm')
 
 	if (select_form == nil)
 		puts "Seems like I could not log you in. I'm sorry :("
