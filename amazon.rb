@@ -64,7 +64,7 @@ a.agent.http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 puts 'Now scanning https://amazon.' + $tld + '/'
 
 a.get('https://www.amazon.' + $tld + '/gp/your-account/order-history/') do |page|
-		logged_in_page = page.form_with(:id => 'ap_signin_form') do |f|
+		logged_in_page = page.form_with(:name => 'signIn') do |f|
 			f.email = email
 			f.password = password
 		end.click_button
