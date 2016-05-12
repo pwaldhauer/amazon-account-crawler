@@ -13,9 +13,7 @@ require 'highline/import'
 
 def get_order_links(agent, page, order_links)
 	links = page.links_with(:text => $overviewtext)
-	links.each { |link|
-		order_links.push(link)
-	}
+	order_links += links
 
 	next_link = page.link_with(:text => $nexttext)
 
@@ -54,6 +52,10 @@ case country
 		$thousandseperator = '.'
 		$nexttext = 'Weiter→'
 end
+
+open('amazon.csv', 'w') { |f|
+	f.puts "year, amount"
+}
 
 a = Mechanize.new { |agent|
 	agent.user_agent_alias = 'Mac Safari'
@@ -138,6 +140,10 @@ a.get('https://www.amazon.' + $tld + '/gp/your-account/order-history/') do |page
 		end
 
 		puts "Done. Year total: " + year_sum.to_s
+        
+        	open('amazon.csv', 'a') { |f|
+            		f.puts year.text + "," + year_sum.to_s
+        	}
 	end
 end
 
